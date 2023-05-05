@@ -30,6 +30,8 @@ public class AppointementController {
        return ResponseEntity.ok().body(appointmentService.get_all_appointemnts());
 
 
+
+
     }
 
     @GetMapping("/create")
