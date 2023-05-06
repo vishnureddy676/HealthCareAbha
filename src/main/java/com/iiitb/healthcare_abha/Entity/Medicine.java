@@ -22,6 +22,11 @@ public class Medicine {
     @Column(name = "duration")
     private String duration;
 
-    @Column(name = "Med_id")
-    private long Med_id;
+   /*@Column(name = "Med_id")
+    private long Med_id;*/
+
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "Med_id",referencedColumnName = "id")
+    private Reports report;
 }

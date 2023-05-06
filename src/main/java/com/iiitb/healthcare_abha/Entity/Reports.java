@@ -18,7 +18,7 @@ public class Reports {
         private long id;
 
 
-        @Column(name = "docId")
+        @Column(name = "doc_id")
         private long docID;
 
         @Column(name = "patient_id")
@@ -29,8 +29,8 @@ public class Reports {
         private long visitID;
 
 
-        @OneToMany(cascade=CascadeType.ALL)
-        @JoinColumn(name="medicine_id")
+        @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+        @JoinColumn(name="Med_id")
         private List<Medicine> medicines;
 
        /* @Column(name = "extra_info")

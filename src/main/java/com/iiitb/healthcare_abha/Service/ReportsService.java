@@ -25,6 +25,7 @@ public class ReportsService {
 
    public String create_report(Reports reports){
        System.out.println("++++++++++++++++++++++"+ reports.getCreatedAt());
+     //reports.getMedicines()
        Reports reports1=reportsInterface.save(reports);
 
     /*List<Medicine>medicineList= reports.getMedicines();
@@ -42,20 +43,62 @@ public class ReportsService {
     medicineInterface.saveAll(medicineList1);*/
 
 
+
        return "reports saved";
 
     }
 
     private final String FOLDER_PATH="C:\\Users\\sivas\\OneDrive\\Documents\\Downloads\\images\\";
-    public byte[] get_all_reports() throws IOException {
+    public ArrayList<byte[]>  getAllFiles(ArrayList<String> files) throws IOException {
+      ArrayList<byte[]> images = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+            String filePath=FOLDER_PATH+files.get(i);
+            byte[]  image= Files.readAllBytes(new File(filePath).toPath());
+            images.add(image);
+        }
 
-        String filePath=FOLDER_PATH+"medical-prescription-7611575.jpg";
-        byte[] images = Files.readAllBytes(new File(filePath).toPath());
+
         return images;
     }
 
    /* public String get_all_report(Reports reports){
 
     }*/
+
+    public Reports updateReport(Reports reports,long reportId){
+
+       Reports reports1= reportsInterface.find_report_id(reportId);
+
+        reports.setId(reports1.getId());
+        reportsInterface.save(reports);
+
+        return reports;
+
+    }
+
+    public Reports deleteReport(long reportId){
+
+        Reports reports= reportsInterface.deleteById(reportId);
+
+
+
+        return reports;
+
+    }
+    public List<Reports> getAllReports(){
+
+        List<Reports>reports = reportsInterface.findAll();
+        for (int i = 0; i < reports.size(); i++) {
+            System.out.println(reports.get(i));
+        }
+
+
+        return reports;
+
+    }
+
+
+
+
 
 }

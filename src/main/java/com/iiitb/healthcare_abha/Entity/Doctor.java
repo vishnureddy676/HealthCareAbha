@@ -41,14 +41,16 @@ public class Doctor {
 
 
     @OneToMany(cascade=CascadeType.REMOVE)
-    @JoinColumn(name="docId")
+    @JoinColumn(name="doc_id")
     private List<Reports> patient_reports;
 
-    @OneToMany(cascade=CascadeType.REMOVE)
+   /* @OneToMany(cascade=CascadeType.REMOVE)
     @JoinColumn(name="docId")
+    private List<Appointements> appointments;*/
+
+    @OneToMany(cascade=CascadeType.REMOVE)
+    @JoinColumn(name="docID")
     private List<Appointements> appointments;
-
-
     @Column(name="details")
     private String details;
 

@@ -1,5 +1,6 @@
 package com.iiitb.healthcare_abha.Controllers;
 
+import com.iiitb.healthcare_abha.Entity.DoctorHelper;
 import com.iiitb.healthcare_abha.Entity.Reports;
 import com.iiitb.healthcare_abha.Service.ReportsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/reports")
@@ -19,25 +24,67 @@ public class ReportController {
 
 
     @PostMapping("/create")
-  public String create_report(@RequestBody Reports reports){
+  public ResponseEntity<Map<String, Object>> create_report(@RequestBody Reports reports){
+        Map<String, Object> response = new HashMap<>();
+       //System.out.println(reports.getDocID());
+       if(reportsService.create_report(reports).equals("reports saved")){
+           response.put("message","report created sucessfully");
+           return ResponseEntity.ok().body(response);
+       }
 
-       System.out.println(reports.getDocID());
-           return reportsService.create_report(reports);
+        response.put("message","report created failed");
+        return ResponseEntity.ok().body(response);
+
 
        }
 
-       @GetMapping("/images")
-    public ResponseEntity<?> get_all_reports() throws IOException {
+       @GetMapping("/files")
+    public ResponseEntity<?> getAllFiles(@RequestBody ArrayList<String> files) throws IOException {
 
 
-               byte[] imageData=reportsService.get_all_reports();
+             ArrayList<byte[]> imageData=reportsService.getAllFiles(files);
            return ResponseEntity.status(HttpStatus.OK)
                    .contentType(MediaType.valueOf("image/png"))
                    .body(imageData);
 
 
 
+
     }
+
+
+    @PutMapping("/{reportId}")
+    public ResponseEntity<Map<String, Object>> updateReport(@RequestBody Reports reports ,@PathVariable long reportId){
+
+       Reports reports1= reportsService.updateReport(reports,reportId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("mesaage","reports updated sucessfully");
+        response.put("reports",reports1);
+        return ResponseEntity.ok().body(response);
+    }
+
+
+    @DeleteMapping ("/{reportId}")
+    public ResponseEntity<Map<String, Object>> deleteReport(@PathVariable long reportId){
+
+        Reports reports1= reportsService.deleteReport(reportId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("mesaage","reports deleted  sucessfully");
+        response.put("reports",reports1);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Reports>> getAllReports() {
+
+
+        return ResponseEntity.ok().body(reportsService.getAllReports());
+
+    }
+
+
+
+
 
 
 }
