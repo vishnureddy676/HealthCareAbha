@@ -26,7 +26,7 @@ public class Medicine {
     private long Med_id;*/
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+   /* @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "Med_id",referencedColumnName = "id")
-    private Reports report;
+    private Reports report;*/
 }

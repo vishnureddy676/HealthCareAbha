@@ -29,7 +29,7 @@ public class Reports {
         private long visitID;
 
 
-        @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+        @OneToMany(cascade=CascadeType.ALL)
         @JoinColumn(name="Med_id")
         private List<Medicine> medicines;
 
