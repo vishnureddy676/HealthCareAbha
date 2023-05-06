@@ -7,6 +7,7 @@ import com.iiitb.healthcare_abha.Entity.Employee;
 import com.iiitb.healthcare_abha.Entity.login_helper;
 
 //import com.iiitb.healthcare_abha.JWT.JwtService;
+import com.iiitb.healthcare_abha.JWT.JwtService;
 import com.iiitb.healthcare_abha.Service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;*/
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -30,12 +35,12 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    //@Autowired
-    //private JwtService jwtService;
+    @Autowired
+    private JwtService jwtService;
 
-    //@Autowired
-    //private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @PreAuthorize("hasAnyAuthority('doctor','admin')")
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>>  register_doctor(@RequestBody DoctorHelper doctorHelper) {
 
@@ -54,7 +59,7 @@ public class DoctorController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @PreAuthorize("hasAnyAuthority('doctor','admin')")
     @PutMapping("/{email}")
     public ResponseEntity<Map<String, Object>> update_doctor_details(@PathVariable String email, @RequestBody DoctorHelper doctorHelper) {
         Map<String, Object> response = new HashMap<>();
@@ -72,7 +77,7 @@ public class DoctorController {
          //return
 
     }
-
+    @PreAuthorize("hasAnyAuthority('doctor','admin')")
     @DeleteMapping("/{email}")
     public ResponseEntity<Map<String, Object>> delete_doctor_details(@PathVariable String email) {
 
@@ -91,7 +96,7 @@ public class DoctorController {
 
     }
 
-    //@PreAuthorize("hasAuthority('doctor')")
+    @PreAuthorize("hasAnyAuthority('doctor','admin')")
     @GetMapping("/")
     public ResponseEntity<List<DoctorHelper>> get_doctor_details() {
 
@@ -106,21 +111,11 @@ public class DoctorController {
     @PostMapping("/login")
     String login_of_doctor(@RequestBody login_helper l) throws Exception {
 
-       /* var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
-        repository.save(user);*/
-
-       /* String jwtToken = jwtService.generateToken(l);
-        return jwtToken;*/
 
 
 
-            /*authenticationManager.authenticate(
+
+            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             l.getEmail(),
                             l.getPassword()
@@ -132,9 +127,21 @@ public class DoctorController {
 
             String  jwtToken = jwtService.generateToken(userDetails);
             return jwtToken;
-        }*/
-        return "";
-    }
+        }
+
+
+
+     /* var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
+                .build();
+        repository.save(user);*/
+
+       /* String jwtToken = jwtService.generateToken(l);
+        return jwtToken;*/
 
 
 }

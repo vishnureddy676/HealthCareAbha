@@ -4,9 +4,13 @@ import com.iiitb.healthcare_abha.Entity.DoctorHelper;
 import com.iiitb.healthcare_abha.Entity.Reports;
 import com.iiitb.healthcare_abha.Service.ReportsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -39,13 +43,17 @@ public class ReportController {
        }
 
        @GetMapping("/files")
-    public ResponseEntity<?> getAllFiles(@RequestBody ArrayList<String> files) throws IOException {
+    public  ResponseEntity<List<byte[]>> getAllFiles(@RequestBody ArrayList<String> files) throws IOException {
+           List<byte[]> images = reportsService.getAllFiles(files);
 
 
-             ArrayList<byte[]> imageData=reportsService.getAllFiles(files);
+
+
+
+           //return new ResponseEntity<>(body, headers, HttpStatus.OK);*/
            return ResponseEntity.status(HttpStatus.OK)
-                   .contentType(MediaType.valueOf("image/png"))
-                   .body(imageData);
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .body(images);
 
 
 

@@ -8,6 +8,7 @@ import com.iiitb.healthcare_abha.Entity.FrontDeskHelper;
 import com.iiitb.healthcare_abha.Entity.login_helper;
 
 //import com.iiitb.healthcare_abha.JWT.JwtService;
+import com.iiitb.healthcare_abha.JWT.JwtService;
 import com.iiitb.healthcare_abha.Service.DoctorService;
 import com.iiitb.healthcare_abha.Service.FrontDeskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;*/
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -37,7 +42,7 @@ public class FrontDeskController {
 
     //@Autowired
     //private AuthenticationManager authenticationManager;
-
+    @PreAuthorize("hasAnyAuthority('frontdesk','admin')")
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>>  register_frontdesk(@RequestBody FrontDeskHelper frontDeskHelper) {
 
@@ -56,7 +61,7 @@ public class FrontDeskController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @PreAuthorize("hasAnyAuthority('frontdesk','admin')")
     @PutMapping("/{email}")
     public ResponseEntity<Map<String, Object>> update_frontdesk_details(@PathVariable String email, @RequestBody FrontDeskHelper frontDeskHelper) {
         Map<String, Object> response = new HashMap<>();
@@ -74,7 +79,7 @@ public class FrontDeskController {
         //return
 
     }
-
+    @PreAuthorize("hasAnyAuthority('frontdesk','admin')")
     @DeleteMapping("/{email}")
     public ResponseEntity<Map<String, Object>> delete_frontdesk_details(@PathVariable String email) {
 
@@ -92,7 +97,7 @@ public class FrontDeskController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @PreAuthorize("hasAnyAuthority('frontdesk','admin')")
     //@PreAuthorize("hasAuthority('doctor')")
     @GetMapping("/")
     public ResponseEntity<List<FrontDeskHelper>> get_frontdesk_details() {
@@ -105,39 +110,29 @@ public class FrontDeskController {
     @Autowired
     private Employeeinterface employeeinterface;
 
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @PostMapping("/login")
-    String login_of_doctor(@RequestBody login_helper l) throws Exception {
+    String  login_of_frontdesk(@RequestBody login_helper l){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        l.getEmail(),
+                        l.getPassword()
+                )
+        );
+        UserDetails userDetails=doctorService.loadUserByUsername( l.getEmail());
 
-       /* var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
-        repository.save(user);*/
+        System.out.println(userDetails.getAuthorities());
 
-       /* String jwtToken = jwtService.generateToken(l);
-        return jwtToken;*/
+        String  jwtToken = jwtService.generateToken(userDetails);
+        return jwtToken;
 
-
-
-            /*authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            l.getEmail(),
-                            l.getPassword()
-                    )
-            );
-            UserDetails userDetails=doctorService.loadUserByUsername( l.getEmail());
-
-            System.out.println(userDetails.getAuthorities());
-
-            String  jwtToken = jwtService.generateToken(userDetails);
-            return jwtToken;
-        }*/
-        return "";
     }
-
 
 }
 

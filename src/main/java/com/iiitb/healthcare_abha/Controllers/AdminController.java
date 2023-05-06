@@ -5,6 +5,7 @@ import com.iiitb.healthcare_abha.DAO.Employeeinterface;
 import com.iiitb.healthcare_abha.Entity.*;
 //import com.iiitb.healthcare_abha.Service;
 //import com.iiitb.healthcare_abha.JWT.JwtService;
+import com.iiitb.healthcare_abha.JWT.JwtService;
 import com.iiitb.healthcare_abha.Service.AdminService;
 import com.iiitb.healthcare_abha.Service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
@@ -31,7 +36,7 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register_admin(@RequestBody AdminHelper adminHelper){
 
@@ -53,7 +58,7 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @PutMapping("/{email}")
     public ResponseEntity<Map<String, Object>> update_admin_details(@PathVariable String email, @RequestBody AdminHelper adminHelper){
 
@@ -73,7 +78,7 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
 
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @DeleteMapping ("/{email}")
     public ResponseEntity<Map<String, Object>> delete_admin_details(@PathVariable String email){
         Map<String, Object> response = new HashMap<>();
@@ -103,28 +108,32 @@ public class AdminController {
 
     }
 
-    /*@Autowired
-    private Employeeinterface employeeinterface;
+    @Autowired
+    private DoctorService doctorService;
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @PostMapping("/login")
     String  login_of_admin(@RequestBody login_helper l){
+authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            l.getEmail(),
+                            l.getPassword()
+                    )
+            );
+            UserDetails userDetails=doctorService.loadUserByUsername( l.getEmail());
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        l.getEmail(),
-                        l.getPassword()
-                )
-        );
-        Employee employee = employeeinterface.findbyemail(l.getEmail());
+            System.out.println(userDetails.getAuthorities());
 
-        if(employee==null) {
-            return  "please passs correct email id";
-        }
-        String  jwtToken = jwtService.generateToken(employee);
-        return jwtToken;
+            String  jwtToken = jwtService.generateToken(userDetails);
+            return jwtToken;
 
     }
 
-*/
+
 
 
 

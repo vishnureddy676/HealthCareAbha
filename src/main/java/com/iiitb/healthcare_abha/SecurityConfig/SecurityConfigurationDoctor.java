@@ -1,4 +1,3 @@
-/*
 package com.iiitb.healthcare_abha.SecurityConfig;
 //package com.javatechie.jwt.api.config;
 
@@ -27,19 +26,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class SecurityConfigurationDoctor {
 
 
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
+    private final AuthenticationProvider authenticationProvider;
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    private final JwtAuthenticationFilter jwtAuthFilter;
 
-    private final AuthenticationProvider authenticationProvider;
         http
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/doctor/login")
+                .requestMatchers("/doctor/login","/admin/login","/frontdesk/login","/patient/login","/hospital/**","/appointment/**","/reports/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -52,4 +51,4 @@ public class SecurityConfigurationDoctor {
 
         return http.build();
     }
-}*/
+}

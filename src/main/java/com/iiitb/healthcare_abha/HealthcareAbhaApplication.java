@@ -5,11 +5,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class HealthcareAbhaApplication  {
+public class HealthcareAbhaApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
 
@@ -27,11 +28,11 @@ public class HealthcareAbhaApplication  {
         };
     }
 
-    /*@Override
+    @Override
     public void run(String... args) throws  Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("secretpassword"));
-    }*/
+        System.out.println(passwordEncoder.encode("password"));
+    }
 }
 
 

@@ -1,4 +1,3 @@
-/*
 package com.iiitb.healthcare_abha.JWT;
 
 
@@ -23,20 +22,18 @@ package com.iiitb.healthcare_abha.JWT;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-   */
-/* @Autowired
-    private Employeeinterface repository;*//*
+ @Autowired
+    private Employeeinterface repository;
 
 
-    //@Autowired
+    @Autowired
     private final DoctorService doctorService;
 
-    */
 /*@Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findbyemail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }*//*
+    }*/
 
 
     @Bean
@@ -60,4 +57,3 @@ public class ApplicationConfig {
 
 
 }
-*/

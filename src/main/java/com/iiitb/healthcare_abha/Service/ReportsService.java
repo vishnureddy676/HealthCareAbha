@@ -7,12 +7,15 @@ import com.iiitb.healthcare_abha.Entity.Medicine;
 import com.iiitb.healthcare_abha.Entity.Prescription;
 import com.iiitb.healthcare_abha.Entity.Reports;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -49,11 +52,16 @@ public class ReportsService {
     }
 
     private final String FOLDER_PATH="C:\\Users\\sivas\\OneDrive\\Documents\\Downloads\\images\\";
-    public ArrayList<byte[]>  getAllFiles(ArrayList<String> files) throws IOException {
-      ArrayList<byte[]> images = new ArrayList<>();
-        for (int i = 0; i < files.size(); i++) {
-            String filePath=FOLDER_PATH+files.get(i);
-            byte[]  image= Files.readAllBytes(new File(filePath).toPath());
+    public List<byte[]> getAllFiles(ArrayList<String> files) throws IOException {
+      List<byte[]> images= new ArrayList<>();
+        for (int i = 0; i<files.size(); i++) {
+            String filePath = FOLDER_PATH + files.get(i);
+            byte[] image = Files.readAllBytes(new File(filePath).toPath());
+            System.out.println(image);
+            String base64Image = Base64.getEncoder().encodeToString(image);
+            System.out.println(base64Image);
+            //images.add(i,image);
+            //ByteArrayResource resource1 = new ByteArrayResource(image);
             images.add(image);
         }
 

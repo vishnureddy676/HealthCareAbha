@@ -4,6 +4,7 @@ package com.iiitb.healthcare_abha.Service;
 
 import com.iiitb.healthcare_abha.DAO.DoctorInterface;
 import com.iiitb.healthcare_abha.DAO.Employeeinterface;
+import com.iiitb.healthcare_abha.DAO.PatientDetails;
 import com.iiitb.healthcare_abha.Entity.Doctor;
 import com.iiitb.healthcare_abha.Entity.DoctorHelper;
 import com.iiitb.healthcare_abha.Entity.Employee;
@@ -15,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;*/
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +26,7 @@ import java.util.List;
 
 @Service
 //@RequiredArgsConstructor
-public class DoctorService {
+public class DoctorService implements UserDetailsService {
     @Autowired
     private DoctorInterface doctorInterface;
 
@@ -188,23 +192,32 @@ public class DoctorService {
        return doctorHelperList;
     }
 
-  public String  login_of_doctor(login_helper l){
-System.out.println(l.getEmail()+"++++++++++++++"+l.getPassword());
-       Employee e= employeeinterface.findbyemailandpassword(l.getEmail(),l.getPassword());
-       if(e==null){
-           return "wrong credintials";
-       }
-       return "login sucessful";
+  public String  login_of_doctor(login_helper l) {
+      System.out.println(l.getEmail() + "++++++++++++++" + l.getPassword());
+      Employee e = employeeinterface.findbyemailandpassword(l.getEmail(), l.getPassword());
+      if (e == null) {
+          return "wrong credintials";
+      }
+      return "login sucessful";
 
-   }
+  }
+  @Autowired
+private PatientDetails patientDetails;
 
-
-    /*@Override
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Employee employee= employeeinterface.findbyemail(username);
-        return employee;
+
+        if (employee != null) {
+            System.out.println("employee__userdetails");
+            return employee;
+        }
+
+        System.out.println("patient__userdetails");
+        return patientDetails.find_email_id(username);
+
         //return new org.springframework.security.core.userdetails.User(employee.getEmail(), employee.getPassword(),employee.get new ArrayList<>());
         //return null;
-    }*/
+    }
 }
 

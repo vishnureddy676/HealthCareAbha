@@ -4,20 +4,22 @@ package com.iiitb.healthcare_abha.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 /*import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;*/
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name="employee")
-public class Employee {
+public class Employee implements UserDetails {
 
     @Column(name = "employee_id",nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -82,7 +84,7 @@ public class Employee {
     private String abha_Id;
 
 
-   /* @Override
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<String> roles= new ArrayList<>();
         roles.add(this.getEmployee_type());
@@ -120,5 +122,5 @@ public class Employee {
     @Override
     public boolean isEnabled() {
         return true;
-    }*/
+    }
 }
